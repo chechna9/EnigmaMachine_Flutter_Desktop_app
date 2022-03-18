@@ -1,4 +1,4 @@
-import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/material.dart';
 
 class MessageWindow extends StatefulWidget {
   const MessageWindow({Key? key}) : super(key: key);

@@ -1,11 +1,14 @@
 import 'package:enigma_simulator/pages/home.dart';
-import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/material.dart';
 
 void main() {
   runApp(
-    const FluentApp(
+    MaterialApp(
+      theme: ThemeData(
+        fontFamily: 'Poppins',
+      ),
       debugShowCheckedModeBanner: false,
-      home: Home(),
+      home: const Home(),
     ),
   );
 }
