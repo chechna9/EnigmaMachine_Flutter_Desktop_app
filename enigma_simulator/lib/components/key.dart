@@ -1,6 +1,8 @@
+import 'package:enigma_simulator/Providers/errorKeyProvider.dart';
 import 'package:enigma_simulator/constants.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class KeyWindow extends StatefulWidget {
   const KeyWindow({Key? key}) : super(key: key);
@@ -12,6 +14,7 @@ class KeyWindow extends StatefulWidget {
 class _KeyWindowState extends State<KeyWindow> {
   @override
   Widget build(BuildContext context) {
+    bool _error = Provider.of<KeyError>(context).error;
     return Column(
       children: [
         const Text(
@@ -39,6 +42,15 @@ class _KeyWindowState extends State<KeyWindow> {
               rotorNumber: (e) {
                 setState(() {
                   firstRotor = e;
+                  if (firstRotor == secondRotor ||
+                      firstRotor == thirdRotor ||
+                      secondRotor == thirdRotor) {
+                    Provider.of<KeyError>(context, listen: false)
+                        .setError(true);
+                  } else {
+                    Provider.of<KeyError>(context, listen: false)
+                        .setError(false);
+                  }
                 });
               },
               rotorDirection: (e) {
@@ -70,6 +82,15 @@ class _KeyWindowState extends State<KeyWindow> {
               rotorNumber: (e) {
                 setState(() {
                   secondRotor = e;
+                  if (firstRotor == secondRotor ||
+                      firstRotor == thirdRotor ||
+                      secondRotor == thirdRotor) {
+                    Provider.of<KeyError>(context, listen: false)
+                        .setError(true);
+                  } else {
+                    Provider.of<KeyError>(context, listen: false)
+                        .setError(false);
+                  }
                 });
               },
               rotorDirection: (e) {
@@ -101,6 +122,16 @@ class _KeyWindowState extends State<KeyWindow> {
               rotorNumber: (e) {
                 setState(() {
                   thirdRotor = e;
+                  if (firstRotor == secondRotor ||
+                      firstRotor == thirdRotor ||
+                      secondRotor == thirdRotor) {
+                    Provider.of<KeyError>(context, listen: false)
+                        .setError(true);
+                  } else {
+                    Provider.of<KeyError>(context, listen: false)
+                        .setError(false);
+                  }
+                  print(_error);
                 });
               },
               rotorDirection: (e) {
@@ -124,7 +155,9 @@ class _KeyWindowState extends State<KeyWindow> {
         const SizedBox(
           height: 20,
         ),
-        RotorConfigButton(),
+        RotorConfigButton(
+          error: _error,
+        ),
       ],
     );
   }
@@ -142,15 +175,17 @@ class RotorInfo {
       required this.rotorSign});
 }
 
-class RotorConfigButton extends StatelessWidget {
-  const RotorConfigButton({
-    Key? key,
-  }) : super(key: key);
+class RotorConfigButton extends StatefulWidget {
+  bool error;
+  RotorConfigButton({Key? key, required this.error}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    bool _error = false;
+  State<RotorConfigButton> createState() => _RotorConfigButtonState();
+}
 
+class _RotorConfigButtonState extends State<RotorConfigButton> {
+  @override
+  Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: myBlue,
@@ -158,13 +193,13 @@ class RotorConfigButton extends StatelessWidget {
         // ignore: prefer_const_literals_to_create_immutables
         boxShadow: [
           BoxShadow(
-            color: _error ? Colors.red : myGreen,
+            color: widget.error ? Colors.red : myGreen,
             offset: const Offset(4, 4),
           ),
         ],
       ),
       child: TextButton(
-        onPressed: _error ? null : () => {},
+        onPressed: widget.error ? null : () {},
         style: TextButton.styleFrom(
           onSurface: myBlue,
           padding: const EdgeInsets.symmetric(
