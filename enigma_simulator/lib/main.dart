@@ -1,11 +1,23 @@
+import 'package:enigma_simulator/Providers/errorKeyProvider.dart';
 import 'package:enigma_simulator/pages/home.dart';
-import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-    const FluentApp(
-      debugShowCheckedModeBanner: false,
-      home: Home(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => KeyError(),
+        ),
+      ],
+      child: MaterialApp(
+        theme: ThemeData(
+          fontFamily: 'Poppins',
+        ),
+        debugShowCheckedModeBanner: false,
+        home: const Home(),
+      ),
     ),
   );
 }

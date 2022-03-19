@@ -10,8 +10,6 @@ class Output extends StatefulWidget {
 class _OutputState extends State<Output> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.cyan,
-    );
+    return Column();
   }
 }
