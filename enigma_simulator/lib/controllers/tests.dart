@@ -11,15 +11,15 @@ class Test{
     MainRouter main_router = new MainRouter();
     main_router.setCle(cle);
     //show content
-    print(main_router.getRoutesValues());
+    print(main_router.getAllRoutesValues());
     //config
     main_router.config();
     //get content
-    print(main_router.getRoutesValues());
+    print(main_router.getAllRoutesValues());
     //reset
     main_router.reset();
     //get content
-    print(main_router.getRoutesValues());
+    print(main_router.getAllRoutesValues());
   return 0;
   }
 
@@ -56,13 +56,19 @@ class Test{
     mainRouter.config();
 
     String decrypted = "";
+    List<Map> letterIndexes = [];
+    Map encription = Map();
     for (int i=0; i< message.length; i++){
-      decrypted = decrypted + mainRouter.encryptCaracter(caracter: encrypted[i])['encrypted'];
+      encription = mainRouter.encryptCaracter(caracter: encrypted[i]);
+      decrypted = decrypted + encription['encrypted'];
+      letterIndexes.add(encription['indexes']);
+      print('indexes' + encription['indexes'].toString());
     }
     //get first order
     print('LOG: backward: ' + decrypted);
     //get next order
     print(message == decrypted);
+    
 
     return 0;
   }
