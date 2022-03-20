@@ -48,3 +48,6 @@ List<String> decalageValues = [
   "24",
   "25"
 ];
+bool encryptMode = true;
+String encryptedText = "";
+String decryptedText = "";

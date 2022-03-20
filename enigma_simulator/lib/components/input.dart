@@ -18,11 +18,7 @@ class _InputState extends State<Input> {
           child: KeyWindow(),
         ),
         Expanded(
-          child: Container(
-            margin: EdgeInsets.all(8),
-            color: Colors.white,
-            child: MessageWindow(),
-          ),
+          child: MessageWindow(),
         ),
       ],
     );
