@@ -57,7 +57,7 @@ class MainRouter{
     return 0;
   }
 
-  List<List<List<int>>> getRoutesValues(){
+  List<List<List<int>>> getAllRoutesValues(){
     //get routes values in 3D array
     //[R1, R2, R3]
     List<List<List<int>>> routes = [];
@@ -65,6 +65,11 @@ class MainRouter{
       routes.add(this.cor_routers[i].getContent());
     }
     return routes;
+  }
+
+  List<List<int>> getRouteValues(index){
+    //get routes values in 2D array
+    return this.cor_routers[index].getContent();
   }
 
   int _routate(){
@@ -86,28 +91,36 @@ class MainRouter{
   //encryption function: return a map {'encrypted': caracter, 'rotated': the routated route}
   Map encryptCaracter({String caracter = 'A'}){
     Map encryptionInfo = Map();
+    encryptionInfo['indexes'] = Map();
     //Turn into lowercase
     caracter = caracter.toLowerCase();
     //find index
     int index = this.alghabet.indexOf(caracter);
+    encryptionInfo['indexes']['first'] = index;
     //print('Log: first index: ' + index.toString());
 
     //forward
+    encryptionInfo['indexes']['forward'] = [0, 0, 0];
     for(int routeIndex = 0; routeIndex<3; routeIndex++){
+      encryptionInfo['indexes']['forward'][routeIndex] = index;
       index = this.cor_routers[routeIndex].getNext(index);
       //print('Log: forward index at router: '+this.cor_routers[routeIndex].key.toString()+': ' + index.toString());
     }
 
     //reflection
+    encryptionInfo['indexes']['reflecteur'] = index;
     index = (this.reflecteur[index] + index)% 26;
 
     //backward
+    encryptionInfo['indexes']['backward'] = [0, 0, 0];
     for(int routeIndex = 2; routeIndex>=0; routeIndex--){
+      encryptionInfo['indexes']['backward'][routeIndex] = index;
       index = this.cor_routers[routeIndex].getNext(index, isBackward: true);
       //print('Log: backward index at router: '+this.cor_routers[routeIndex].key.toString()+': ' + index.toString());
     }
 
     //get letter
+    encryptionInfo['indexes']['last'] = index;
     encryptionInfo['encrypted'] = this.alghabet[index].toUpperCase();
     //rotate after calculating the incryption
     encryptionInfo['rotated'] = this._routate();
