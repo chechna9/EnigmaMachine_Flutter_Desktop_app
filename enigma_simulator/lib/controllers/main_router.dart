@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
+
 import 'child_router.dart';
 import 'consts.dart';
 import 'cle.dart';
 
-class MainRouter {
+class MainRouter extends ChangeNotifier {
   List<ChildRouter> cor_routers = [
     ChildRouter(key: 1, content: List.from(R1)),
     ChildRouter(key: 2, content: List.from(R2)),
@@ -95,7 +97,7 @@ class MainRouter {
     Map encryptionInfo = Map();
     encryptionInfo['indexes'] = Map();
     //Turn into lowercase
-    caracter = caracter.toLowerCase();
+    caracter = caracter.toUpperCase();
     //find index
     int index = this.alghabet.indexOf(caracter);
     encryptionInfo['indexes']['first'] = index;
@@ -126,6 +128,7 @@ class MainRouter {
     encryptionInfo['encrypted'] = this.alghabet[index].toUpperCase();
     //rotate after calculating the incryption
     encryptionInfo['rotated'] = this._routate();
+    notifyListeners();
     return encryptionInfo;
   }
 }

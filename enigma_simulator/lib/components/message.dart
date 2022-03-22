@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../Providers/messageProvider.dart';
 import '../constants.dart';
 
 class MessageWindow extends StatefulWidget {
@@ -10,9 +12,18 @@ class MessageWindow extends StatefulWidget {
 }
 
 class _MessageWindowState extends State<MessageWindow> {
+  final encryptController = TextEditingController();
+  final decrypytConroller = TextEditingController();
   void _switchMode() {
     setState(() {
       encryptMode = !encryptMode;
+      firstOperation = true;
+      Provider.of<Messages>(context, listen: false).resetEncrypt();
+      Provider.of<Messages>(context, listen: false).resetDecrypt();
+      encryptController.clear();
+      decrypytConroller.clear();
+      mR.reset();
+      mR.config();
     });
   }
 
@@ -21,13 +32,19 @@ class _MessageWindowState extends State<MessageWindow> {
     return Row(
       children: [
         Expanded(
-          child: EncryptedMessage(switchMode: _switchMode),
+          child: EncryptedMessage(
+            switchMode: _switchMode,
+            controller: decrypytConroller,
+          ),
         ),
         const SizedBox(
           width: 15,
         ),
         Expanded(
-          child: DecryptedMessage(switchMode: _switchMode),
+          child: DecryptedMessage(
+            switchMode: _switchMode,
+            controller: encryptController,
+          ),
         ),
       ],
     );
@@ -36,8 +53,10 @@ class _MessageWindowState extends State<MessageWindow> {
 
 class EncryptedMessage extends StatefulWidget {
   final Function switchMode;
+  final TextEditingController controller;
 
-  const EncryptedMessage({Key? key, required this.switchMode})
+  const EncryptedMessage(
+      {Key? key, required this.switchMode, required this.controller})
       : super(key: key);
 
   @override
@@ -64,7 +83,6 @@ class _EncryptedMessageState extends State<EncryptedMessage> {
             onPressed: () {
               if (!encryptMode) {
                 widget.switchMode();
-                print(encryptedText);
               }
             },
             style: TextButton.styleFrom(
@@ -90,6 +108,12 @@ class _EncryptedMessageState extends State<EncryptedMessage> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
+              controller: widget.controller,
+              onChanged: (e) {
+                Provider.of<Messages>(context, listen: false).resetDecrypt();
+                Provider.of<Messages>(context, listen: false)
+                    .addToDecrypt(widget.controller.text);
+              },
               enabled: encryptMode,
               style: TextStyle(
                 fontFamily: "Poppins",
@@ -100,6 +124,13 @@ class _EncryptedMessageState extends State<EncryptedMessage> {
               cursorColor: myGreen,
               maxLines: 8,
               decoration: InputDecoration(
+                hintText: Provider.of<Messages>(context).decryptedText,
+                hintStyle: TextStyle(
+                  fontFamily: "Poppins",
+                  color: encryptMode ? Colors.black : Colors.white,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                ),
                 fillColor: encryptMode ? Colors.white : myBlue,
                 filled: true,
                 disabledBorder: OutlineInputBorder(
@@ -128,10 +159,10 @@ class _EncryptedMessageState extends State<EncryptedMessage> {
 
 class DecryptedMessage extends StatefulWidget {
   final Function switchMode;
-  const DecryptedMessage({
-    Key? key,
-    required this.switchMode,
-  }) : super(key: key);
+  final TextEditingController controller;
+  const DecryptedMessage(
+      {Key? key, required this.switchMode, required this.controller})
+      : super(key: key);
 
   @override
   State<DecryptedMessage> createState() => _DecryptedMessageState();
@@ -182,6 +213,12 @@ class _DecryptedMessageState extends State<DecryptedMessage> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
+              controller: widget.controller,
+              onChanged: (e) {
+                Provider.of<Messages>(context, listen: false).resetEncrypt();
+                Provider.of<Messages>(context, listen: false)
+                    .addToEncrypt(widget.controller.text);
+              },
               enabled: !encryptMode,
               style: TextStyle(
                 fontFamily: "Poppins",
@@ -192,6 +229,13 @@ class _DecryptedMessageState extends State<DecryptedMessage> {
               cursorColor: myGreen,
               maxLines: 8,
               decoration: InputDecoration(
+                hintText: Provider.of<Messages>(context).encryptedText,
+                hintStyle: TextStyle(
+                  fontFamily: "Poppins",
+                  color: !encryptMode ? Colors.black : Colors.white,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                ),
                 fillColor: !encryptMode ? Colors.white : myBlue,
                 filled: true,
                 disabledBorder: OutlineInputBorder(

@@ -1,8 +1,11 @@
 import 'package:enigma_simulator/Providers/errorKeyProvider.dart';
 import 'package:enigma_simulator/constants.dart';
+import 'package:enigma_simulator/controllers/cle.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../Providers/messageProvider.dart';
 
 class KeyWindow extends StatefulWidget {
   const KeyWindow({Key? key}) : super(key: key);
@@ -131,7 +134,6 @@ class _KeyWindowState extends State<KeyWindow> {
                     Provider.of<KeyError>(context, listen: false)
                         .setError(false);
                   }
-                  print(_error);
                 });
               },
               rotorDirection: (e) {
@@ -185,6 +187,14 @@ class RotorConfigButton extends StatefulWidget {
 
 class _RotorConfigButtonState extends State<RotorConfigButton> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    mR.reset();
+    mR.config();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
@@ -199,7 +209,40 @@ class _RotorConfigButtonState extends State<RotorConfigButton> {
         ],
       ),
       child: TextButton(
-        onPressed: widget.error ? null : () {},
+        onPressed: widget.error
+            ? null
+            : () {
+                mR.setCle(
+                  Cle(
+                    order: [
+                      int.parse(firstRotor[1]),
+                      int.parse(secondRotor[1]),
+                      int.parse(thirdRotor[1]),
+                    ],
+                    directions: [
+                      firstRotorDirection == "D" ? 1 : -1,
+                      secondRotorDirection == "D" ? 1 : -1,
+                      thirdRotorDirection == "D" ? 1 : -1,
+                    ],
+                    routations: [
+                      firstRotorSigne == "-"
+                          ? int.parse(firstRotorDecalage) * -1
+                          : int.parse(firstRotorDecalage),
+                      secondRotorSigne == "-"
+                          ? int.parse(secondRotorDecalage) * -1
+                          : int.parse(secondRotorDecalage),
+                      thirdRotorSigne == "-"
+                          ? int.parse(thirdRotorDecalage) * -1
+                          : int.parse(thirdRotorDecalage),
+                    ],
+                  ),
+                );
+                mR.reset();
+                mR.config();
+                Provider.of<Messages>(context, listen: false).resetDecrypt();
+                Provider.of<Messages>(context, listen: false).resetEncrypt();
+                firstOperation = true;
+              },
         style: TextButton.styleFrom(
           onSurface: myBlue,
           padding: const EdgeInsets.symmetric(

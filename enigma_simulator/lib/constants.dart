@@ -1,23 +1,28 @@
+import 'package:enigma_simulator/controllers/main_router.dart';
 import 'package:flutter/material.dart';
 
 const Color myGrey = Color(0xff506266);
 const Color myBlue = Color(0xff10454f);
 const Color myGreen = Color(0xffbde038);
+bool encryptMode = true;
+bool firstOperation = true;
+MainRouter mR = MainRouter();
+
 //first rotor conrollers
 String firstRotor = "R1";
 String firstRotorDirection = "D";
 String firstRotorSigne = "+";
-String firstRotorDecalage = "1";
+String firstRotorDecalage = "0";
 //Second rotor values
 String secondRotor = "R2";
 String secondRotorDirection = "D";
 String secondRotorSigne = "+";
-String secondRotorDecalage = "1";
+String secondRotorDecalage = "0";
 //third rotor values
 String thirdRotor = "R3";
 String thirdRotorDirection = "D";
 String thirdRotorSigne = "+";
-String thirdRotorDecalage = "1";
+String thirdRotorDecalage = "0";
 //for rotors
 List<String> rotors = ["R1", "R2", "R3"];
 List<String> decalageValues = [
@@ -48,6 +53,3 @@ List<String> decalageValues = [
   "24",
   "25"
 ];
-bool encryptMode = true;
-String encryptedText = "";
-String decryptedText = "";

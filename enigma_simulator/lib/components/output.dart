@@ -1,11 +1,11 @@
+import 'package:enigma_simulator/Providers/messageProvider.dart';
 import 'package:enigma_simulator/components/LettreBox.dart';
 import 'package:enigma_simulator/constants.dart';
 import 'package:enigma_simulator/controllers/consts.dart';
 import 'package:enigma_simulator/controllers/crypt.dart';
 import 'package:enigma_simulator/controllers/main_router.dart';
 import 'package:flutter/material.dart';
-
-MainRouter mR = MainRouter();
+import 'package:provider/provider.dart';
 
 class Output extends StatefulWidget {
   const Output({Key? key}) : super(key: key);
@@ -128,6 +128,8 @@ class Rotor1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<List<int>> rotor1 = Provider.of<MainRouter>(context).getRouteValues(0);
+
     return Container(
       padding: const EdgeInsets.only(
         left: 8,
@@ -145,8 +147,7 @@ class Rotor1 extends StatelessWidget {
       child: Column(
         children: [
           Row(
-            children: mR
-                .getRouteValues(0)[0]
+            children: rotor1[0]
                 .map((e) => LettreBox(
                     animColor: Colors.red,
                     triggerChange: false,
@@ -157,8 +158,7 @@ class Rotor1 extends StatelessWidget {
             height: 10,
           ),
           Row(
-            children: mR
-                .getRouteValues(0)[1]
+            children: rotor1[1]
                 .map((e) => LettreBox(
                     animColor: Colors.red,
                     triggerChange: false,
@@ -298,22 +298,53 @@ class EtapSuivante extends StatefulWidget {
 }
 
 class _EtapSuivanteState extends State<EtapSuivante> {
+  int ind = 0;
   @override
   Widget build(BuildContext context) {
+    String decryptedText = Provider.of<Messages>(context).decryptedText;
+    String encryptedText = Provider.of<Messages>(context).encryptedText;
     return Container(
       decoration: BoxDecoration(
         color: myBlue,
         borderRadius: BorderRadius.circular(10),
-        // ignore: prefer_const_literals_to_create_immutables
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: myGreen,
-            offset: const Offset(4, 4),
+            offset: Offset(4, 4),
           ),
         ],
       ),
       child: TextButton(
-        onPressed: () {},
+        onPressed: () {
+          if (encryptMode) {
+            if (firstOperation) {
+              ind = 0;
+
+              Provider.of<Messages>(context, listen: false).resetEncrypt();
+              firstOperation = false;
+            }
+
+            if (ind < decryptedText.length) {
+              Provider.of<Messages>(context, listen: false).addToEncrypt(mR
+                  .encryptCaracter(caracter: decryptedText[ind])['encrypted']);
+
+              ind++;
+            }
+          } else {
+            if (firstOperation) {
+              ind = 0;
+              Provider.of<Messages>(context, listen: false).resetDecrypt();
+
+              firstOperation = false;
+            }
+            if (ind < encryptedText.length) {
+              Provider.of<Messages>(context, listen: false).addToDecrypt(mR
+                  .encryptCaracter(caracter: encryptedText[ind])['encrypted']);
+
+              ind++;
+            }
+          }
+        },
         style: TextButton.styleFrom(
           onSurface: myBlue,
           padding: const EdgeInsets.symmetric(
