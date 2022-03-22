@@ -17,10 +17,15 @@ class _HomeState extends State<Home> {
       child: Container(
         color: myGrey,
         child: Column(
-          children: [
+          children: const [
             Expanded(
               flex: 2,
               child: Output(),
+            ),
+            Divider(
+              endIndent: 400,
+              indent: 400,
+              color: myBlue,
             ),
             Expanded(
               child: Input(),
