@@ -23,7 +23,7 @@ class _LettreBoxState extends State<LettreBox> {
       height: 30,
       width: 30,
       alignment: Alignment.center,
-      margin: EdgeInsets.only(right: 10),
+      margin: const EdgeInsets.only(right: 10),
       decoration: BoxDecoration(
         color: myBlue,
         borderRadius: BorderRadius.circular(10),

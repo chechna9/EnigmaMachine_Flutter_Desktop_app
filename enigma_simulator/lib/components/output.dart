@@ -17,162 +17,34 @@ class Output extends StatefulWidget {
 class _OutputState extends State<Output> {
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        //Arrays
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Row(
-              children: mR.reflecteur
-                  .map((e) => LettreBox(
-                      animColor: Colors.red,
-                      triggerChange: false,
-                      caractere: e.toString()))
-                  .toList(),
-            ),
-            //rotor 3
-            Container(
-              padding: const EdgeInsets.only(
-                left: 8,
-                right: 8,
-                top: 8,
-                bottom: 12,
-              ),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: myGreen,
-                  style: BorderStyle.solid,
-                  width: 2,
+        //reflacteur
+        Transform.translate(
+          offset: const Offset(15, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: const [
+              Reflecteur(),
+              Text(
+                "Réflecteur",
+                style: TextStyle(
+                  fontFamily: "Poppins",
+                  color: Colors.white,
+                  fontWeight: FontWeight.w100,
+                  fontSize: 18,
                 ),
               ),
-              child: Column(
-                children: [
-                  Row(
-                    children: mR
-                        .getRouteValues(2)[0]
-                        .map((e) => LettreBox(
-                            animColor: Colors.red,
-                            triggerChange: false,
-                            caractere: e.toString()))
-                        .toList(),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: mR
-                        .getRouteValues(2)[1]
-                        .map((e) => LettreBox(
-                            animColor: Colors.red,
-                            triggerChange: false,
-                            caractere: e.toString()))
-                        .toList(),
-                  ),
-                ],
-              ),
-            ),
-            //rotor 2
-            Container(
-              padding: const EdgeInsets.only(
-                left: 8,
-                right: 8,
-                top: 8,
-                bottom: 12,
-              ),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: myGreen,
-                  style: BorderStyle.solid,
-                  width: 2,
-                ),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    children: mR
-                        .getRouteValues(1)[0]
-                        .map((e) => LettreBox(
-                            animColor: Colors.red,
-                            triggerChange: false,
-                            caractere: e.toString()))
-                        .toList(),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: mR
-                        .getRouteValues(1)[1]
-                        .map((e) => LettreBox(
-                            animColor: Colors.red,
-                            triggerChange: false,
-                            caractere: e.toString()))
-                        .toList(),
-                  ),
-                ],
-              ),
-            ),
-            //rotor 1
-            Container(
-              padding: const EdgeInsets.only(
-                left: 8,
-                right: 8,
-                top: 8,
-                bottom: 12,
-              ),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: myGreen,
-                  style: BorderStyle.solid,
-                  width: 2,
-                ),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    children: mR
-                        .getRouteValues(0)[0]
-                        .map((e) => LettreBox(
-                            animColor: Colors.red,
-                            triggerChange: false,
-                            caractere: e.toString()))
-                        .toList(),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: mR
-                        .getRouteValues(0)[1]
-                        .map((e) => LettreBox(
-                            animColor: Colors.red,
-                            triggerChange: false,
-                            caractere: e.toString()))
-                        .toList(),
-                  ),
-                ],
-              ),
-            ),
-
-            const Alphabet(),
-          ],
+            ],
+          ),
         ),
-        //hints
-        Column(
+        //Rotor 3
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            const Text(
-              "Réflecteur",
-              style: TextStyle(
-                fontFamily: "Poppins",
-                color: Colors.white,
-                fontWeight: FontWeight.w100,
-                fontSize: 18,
-              ),
-            ),
-            const Text(
+          children: const [
+            Rotor3(),
+            Text(
               "Rotor 3",
               style: TextStyle(
                 fontFamily: "Poppins",
@@ -181,7 +53,14 @@ class _OutputState extends State<Output> {
                 fontSize: 18,
               ),
             ),
-            const Text(
+          ],
+        ),
+        //Rotor 2
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: const [
+            Rotor2(),
+            Text(
               "Rotor 2",
               style: TextStyle(
                 fontFamily: "Poppins",
@@ -190,7 +69,14 @@ class _OutputState extends State<Output> {
                 fontSize: 18,
               ),
             ),
-            const Text(
+          ],
+        ),
+        //Rotor 1
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: const [
+            Rotor1(),
+            Text(
               "Rotor 1",
               style: TextStyle(
                 fontFamily: "Poppins",
@@ -199,10 +85,188 @@ class _OutputState extends State<Output> {
                 fontSize: 18,
               ),
             ),
-            EtapSuivante(),
           ],
         ),
+        //Alphabet
+        Transform.translate(
+          offset: const Offset(25, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              const Alphabet(),
+              EtapSuivante(),
+            ],
+          ),
+        ),
       ],
+    );
+  }
+}
+
+class Reflecteur extends StatelessWidget {
+  const Reflecteur({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: mR.reflecteur
+          .map((e) => LettreBox(
+              animColor: Colors.red,
+              triggerChange: false,
+              caractere: e.toString()))
+          .toList(),
+    );
+  }
+}
+
+class Rotor1 extends StatelessWidget {
+  const Rotor1({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(
+        left: 8,
+        right: 8,
+        top: 8,
+        bottom: 12,
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: myGreen,
+          style: BorderStyle.solid,
+          width: 2,
+        ),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: mR
+                .getRouteValues(0)[0]
+                .map((e) => LettreBox(
+                    animColor: Colors.red,
+                    triggerChange: false,
+                    caractere: e.toString()))
+                .toList(),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: mR
+                .getRouteValues(0)[1]
+                .map((e) => LettreBox(
+                    animColor: Colors.red,
+                    triggerChange: false,
+                    caractere: e.toString()))
+                .toList(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Rotor2 extends StatelessWidget {
+  const Rotor2({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(
+        left: 8,
+        right: 8,
+        top: 8,
+        bottom: 12,
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: myGreen,
+          style: BorderStyle.solid,
+          width: 2,
+        ),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: mR
+                .getRouteValues(1)[0]
+                .map((e) => LettreBox(
+                    animColor: Colors.red,
+                    triggerChange: false,
+                    caractere: e.toString()))
+                .toList(),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: mR
+                .getRouteValues(1)[1]
+                .map((e) => LettreBox(
+                    animColor: Colors.red,
+                    triggerChange: false,
+                    caractere: e.toString()))
+                .toList(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Rotor3 extends StatelessWidget {
+  const Rotor3({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(
+        left: 8,
+        right: 8,
+        top: 8,
+        bottom: 12,
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: myGreen,
+          style: BorderStyle.solid,
+          width: 2,
+        ),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: mR
+                .getRouteValues(2)[0]
+                .map((e) => LettreBox(
+                    animColor: Colors.red,
+                    triggerChange: false,
+                    caractere: e.toString()))
+                .toList(),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: mR
+                .getRouteValues(2)[1]
+                .map((e) => LettreBox(
+                    animColor: Colors.red,
+                    triggerChange: false,
+                    caractere: e.toString()))
+                .toList(),
+          ),
+        ],
+      ),
     );
   }
 }
