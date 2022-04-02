@@ -1,3 +1,4 @@
+import 'package:enigma_simulator/constants.dart';
 import 'package:flutter/foundation.dart';
 
 import 'child_router.dart';
@@ -23,11 +24,7 @@ class MainRouter extends ChangeNotifier {
   MainRouter() {
     encryptionInfo['indexes'] = Map();
     //init&reset
-    encryptionInfo['indexes']["reflecteur"] = -1;
-    encryptionInfo['indexes']['forward'] = [-1, -1, -1];
-    encryptionInfo['indexes']['backward'] = [-1, -1, -1];
-    encryptionInfo["indexes"]["first"] = -1;
-    encryptionInfo["indexes"]["last"] = -1;
+    initAnim();
   }
 
   int setCle(Cle cle) {
@@ -40,6 +37,7 @@ class MainRouter extends ChangeNotifier {
   }
 
   int config() {
+    shouldRotate = false;
     //config routers
     for (int i = 0; i <= 2; i++) {
       cor_routers[i].rotate(cle.getRoutersRotation(router: i + 1));
@@ -53,7 +51,17 @@ class MainRouter extends ChangeNotifier {
     return 0;
   }
 
+  void initAnim() {
+    encryptionInfo['indexes']["reflecteur"] = -1;
+    encryptionInfo['indexes']['forward'] = [-1, -1, -1];
+    encryptionInfo['indexes']['backward'] = [-1, -1, -1];
+    encryptionInfo["indexes"]["first"] = -1;
+    encryptionInfo["indexes"]["last"] = -1;
+    notifyListeners();
+  }
+
   int reset() {
+    shouldRotate = false;
     //roset routers
     cor_routers.clear();
     this.cor_routers = [
@@ -65,11 +73,7 @@ class MainRouter extends ChangeNotifier {
     this._currentRouter = this.cle.getFirstRouterInOrder();
     this._routationCounter = 0;
     //init&reset
-    encryptionInfo['indexes']["reflecteur"] = -1;
-    encryptionInfo['indexes']['forward'] = [-1, -1, -1];
-    encryptionInfo['indexes']['backward'] = [-1, -1, -1];
-    encryptionInfo["indexes"]["first"] = -1;
-    encryptionInfo["indexes"]["last"] = -1;
+    initAnim();
     notifyListeners();
     return 0;
   }
@@ -89,7 +93,7 @@ class MainRouter extends ChangeNotifier {
     return this.cor_routers[index].getContent();
   }
 
-  int _routate() {
+  int routate() {
     //rotate the current router
     int routerToRotate = this._currentRouter;
     //print("LOG: in rotate: routerToRotate = " + routerToRotate.toString());
@@ -105,6 +109,7 @@ class MainRouter extends ChangeNotifier {
       //reset routations
       this._routationCounter = 0;
     }
+    notifyListeners();
     return routerToRotate;
   }
 
@@ -146,7 +151,7 @@ class MainRouter extends ChangeNotifier {
     encryptionInfo['indexes']['last'] = index;
     encryptionInfo['encrypted'] = this.alghabet[index].toUpperCase();
     //rotate after calculating the incryption
-    encryptionInfo['rotated'] = this._routate();
+    // encryptionInfo['rotated'] = this._routate();
     notifyListeners();
     return encryptionInfo;
   }

@@ -379,6 +379,7 @@ class EtapSuivante extends StatefulWidget {
 
 class _EtapSuivanteState extends State<EtapSuivante> {
   int ind = 0;
+
   @override
   Widget build(BuildContext context) {
     String decryptedText = Provider.of<Messages>(context).decryptedText;
@@ -396,36 +397,45 @@ class _EtapSuivanteState extends State<EtapSuivante> {
       ),
       child: TextButton(
         onPressed: () {
-          if (encryptMode) {
-            if (firstOperation) {
-              ind = 0;
-
-              Provider.of<Messages>(context, listen: false).resetEncrypt();
-              firstOperation = false;
-            }
-
-            if (ind < decryptedText.length) {
-              Provider.of<Messages>(context, listen: false).addToEncrypt(widget
-                  .mR
-                  .encryptCaracter(caracter: decryptedText[ind])['encrypted']);
-
-              ind++;
-            }
+          if (shouldRotate) {
+            widget.mR.initAnim();
+            print(widget.mR.routate());
           } else {
-            if (firstOperation) {
-              ind = 0;
-              Provider.of<Messages>(context, listen: false).resetDecrypt();
+            if (encryptMode) {
+              if (firstOperation) {
+                ind = 0;
 
-              firstOperation = false;
-            }
-            if (ind < encryptedText.length) {
-              Provider.of<Messages>(context, listen: false).addToDecrypt(widget
-                  .mR
-                  .encryptCaracter(caracter: encryptedText[ind])['encrypted']);
+                Provider.of<Messages>(context, listen: false).resetEncrypt();
+                firstOperation = false;
+              }
 
-              ind++;
+              if (ind < decryptedText.length) {
+                Provider.of<Messages>(context, listen: false).addToEncrypt(
+                    widget.mR.encryptCaracter(
+                        caracter: decryptedText[ind])['encrypted']);
+
+                ind++;
+              }
+            } else {
+              if (firstOperation) {
+                ind = 0;
+                Provider.of<Messages>(context, listen: false).resetDecrypt();
+
+                firstOperation = false;
+              }
+              if (ind < encryptedText.length) {
+                Provider.of<Messages>(context, listen: false).addToDecrypt(
+                    widget.mR.encryptCaracter(
+                        caracter: encryptedText[ind])['encrypted']);
+
+                ind++;
+              }
             }
           }
+          if (ind < decryptedText.length || ind < encryptedText.length)
+            setState(() {
+              shouldRotate = !shouldRotate;
+            });
         },
         style: TextButton.styleFrom(
           onSurface: myBlue,
