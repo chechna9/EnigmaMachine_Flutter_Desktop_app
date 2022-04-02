@@ -2,10 +2,14 @@ import 'package:enigma_simulator/constants.dart';
 import 'package:flutter/material.dart';
 
 class LettreBox extends StatefulWidget {
-  final Color animColor;
-  final bool triggerChange;
+  void setTrigger() {
+    this.triggerChange = true;
+  }
+
+  Color animColor;
+  bool triggerChange;
   final String caractere;
-  const LettreBox(
+  LettreBox(
       {Key? key,
       required this.animColor,
       required this.triggerChange,

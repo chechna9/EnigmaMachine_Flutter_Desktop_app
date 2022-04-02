@@ -20,7 +20,15 @@ class MainRouter extends ChangeNotifier {
   //currrent router, value in 1, 2, 3
   int _currentRouter = 0;
 
-  MainRouter();
+  MainRouter() {
+    encryptionInfo['indexes'] = Map();
+    //init&reset
+    encryptionInfo['indexes']["reflecteur"] = -1;
+    encryptionInfo['indexes']['forward'] = [-1, -1, -1];
+    encryptionInfo['indexes']['backward'] = [-1, -1, -1];
+    encryptionInfo["indexes"]["first"] = -1;
+    encryptionInfo["indexes"]["last"] = -1;
+  }
 
   int setCle(Cle cle) {
     this.cle = cle;
@@ -56,6 +64,12 @@ class MainRouter extends ChangeNotifier {
 
     this._currentRouter = this.cle.getFirstRouterInOrder();
     this._routationCounter = 0;
+    //init&reset
+    encryptionInfo['indexes']["reflecteur"] = -1;
+    encryptionInfo['indexes']['forward'] = [-1, -1, -1];
+    encryptionInfo['indexes']['backward'] = [-1, -1, -1];
+    encryptionInfo["indexes"]["first"] = -1;
+    encryptionInfo["indexes"]["last"] = -1;
     notifyListeners();
     return 0;
   }
@@ -94,21 +108,24 @@ class MainRouter extends ChangeNotifier {
     return routerToRotate;
   }
 
+  Map encryptionInfo = Map();
+
   //encryption function: return a map {'encrypted': caracter, 'rotated': the routated route}
   Map encryptCaracter({String caracter = 'A'}) {
-    Map encryptionInfo = Map();
     encryptionInfo['indexes'] = Map();
     //Turn into lowercase
     caracter = caracter.toUpperCase();
     //find index
     int index = this.alghabet.indexOf(caracter);
     encryptionInfo['indexes']['first'] = index;
+
     //print('Log: first index: ' + index.toString());
 
     //forward
-    encryptionInfo['indexes']['forward'] = [0, 0, 0];
+    encryptionInfo['indexes']['forward'] = [-1, -1, -1];
     for (int routeIndex = 0; routeIndex < 3; routeIndex++) {
       encryptionInfo['indexes']['forward'][routeIndex] = index;
+
       index = this.cor_routers[routeIndex].getNext(index);
       //print('Log: forward index at router: '+this.cor_routers[routeIndex].key.toString()+': ' + index.toString());
     }
@@ -118,7 +135,7 @@ class MainRouter extends ChangeNotifier {
     index = (this.reflecteur[index] + index) % 26;
 
     //backward
-    encryptionInfo['indexes']['backward'] = [0, 0, 0];
+    encryptionInfo['indexes']['backward'] = [-1, -1, -1]; //init
     for (int routeIndex = 2; routeIndex >= 0; routeIndex--) {
       encryptionInfo['indexes']['backward'][routeIndex] = index;
       index = this.cor_routers[routeIndex].getNext(index, isBackward: true);

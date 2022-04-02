@@ -81,9 +81,11 @@ class _OutputState extends State<Output> {
         //Rotor 1
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: const [
-            Rotor1(),
-            Text(
+          children: [
+            Rotor1(
+              mR: widget.mR,
+            ),
+            const Text(
               "Rotor 1",
               style: TextStyle(
                 fontFamily: "Poppins",
@@ -120,25 +122,62 @@ class Reflecteur extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<LettreBox> refl = mR.reflecteur.map(
+      (e) {
+        return LettreBox(
+          animColor: Colors.red,
+          triggerChange: false,
+          caractere: e.toString(),
+        );
+      },
+    ).toList();
+    mR.encryptionInfo['indexes']["reflecteur"] == -1
+        ? null
+        : refl
+            .elementAt(mR.encryptionInfo['indexes']["reflecteur"])
+            .setTrigger();
+
     return Row(
-      children: mR.reflecteur
-          .map((e) => LettreBox(
-              animColor: Colors.red,
-              triggerChange: false,
-              caractere: e.toString()))
-          .toList(),
+      children: refl,
     );
   }
 }
 
 class Rotor1 extends StatelessWidget {
+  final MainRouter mR;
   const Rotor1({
     Key? key,
+    required this.mR,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List<List<int>> rotor1 = Provider.of<MainRouter>(context).getRouteValues(0);
+    List<List<int>> rotor1 = mR.getRouteValues(0);
+
+    List<LettreBox> rotor1Forward = rotor1[0]
+        .map((e) => LettreBox(
+            animColor: Colors.red,
+            triggerChange: false,
+            caractere: e.toString()))
+        .toList();
+
+    mR.encryptionInfo['indexes']['forward'][0] == -1
+        ? null
+        : rotor1Forward
+            .elementAt(mR.encryptionInfo['indexes']['forward'][0])
+            .setTrigger();
+
+    List<LettreBox> rotor1Backward = rotor1[1]
+        .map((e) => LettreBox(
+            animColor: Colors.blue,
+            triggerChange: false,
+            caractere: e.toString()))
+        .toList();
+    mR.encryptionInfo['indexes']['backward'][0] == -1
+        ? null
+        : rotor1Backward
+            .elementAt(mR.encryptionInfo['indexes']['backward'][0])
+            .setTrigger();
 
     return Container(
       padding: const EdgeInsets.only(
@@ -157,23 +196,13 @@ class Rotor1 extends StatelessWidget {
       child: Column(
         children: [
           Row(
-            children: rotor1[0]
-                .map((e) => LettreBox(
-                    animColor: Colors.red,
-                    triggerChange: false,
-                    caractere: e.toString()))
-                .toList(),
+            children: rotor1Backward,
           ),
           const SizedBox(
             height: 10,
           ),
           Row(
-            children: rotor1[1]
-                .map((e) => LettreBox(
-                    animColor: Colors.red,
-                    triggerChange: false,
-                    caractere: e.toString()))
-                .toList(),
+            children: rotor1Forward,
           ),
         ],
       ),
@@ -187,6 +216,31 @@ class Rotor2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<List<int>> rotor2 = mR.getRouteValues(1);
+    List<LettreBox> rotor2Forward = rotor2[0]
+        .map((e) => LettreBox(
+            animColor: Colors.red,
+            triggerChange: false,
+            caractere: e.toString()))
+        .toList();
+
+    mR.encryptionInfo['indexes']['forward'][1] == -1
+        ? null
+        : rotor2Forward
+            .elementAt(mR.encryptionInfo['indexes']['forward'][1])
+            .setTrigger();
+
+    List<LettreBox> rotor2Backward = rotor2[1]
+        .map((e) => LettreBox(
+            animColor: Colors.blue,
+            triggerChange: false,
+            caractere: e.toString()))
+        .toList();
+    mR.encryptionInfo['indexes']['backward'][1] == -1
+        ? null
+        : rotor2Backward
+            .elementAt(mR.encryptionInfo['indexes']['backward'][1])
+            .setTrigger();
     return Container(
       padding: const EdgeInsets.only(
         left: 8,
@@ -204,25 +258,13 @@ class Rotor2 extends StatelessWidget {
       child: Column(
         children: [
           Row(
-            children: mR
-                .getRouteValues(1)[0]
-                .map((e) => LettreBox(
-                    animColor: Colors.red,
-                    triggerChange: false,
-                    caractere: e.toString()))
-                .toList(),
+            children: rotor2Backward,
           ),
           const SizedBox(
             height: 10,
           ),
           Row(
-            children: mR
-                .getRouteValues(1)[1]
-                .map((e) => LettreBox(
-                    animColor: Colors.red,
-                    triggerChange: false,
-                    caractere: e.toString()))
-                .toList(),
+            children: rotor2Forward,
           ),
         ],
       ),
@@ -236,6 +278,31 @@ class Rotor3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<List<int>> rotor3 = mR.getRouteValues(2);
+    List<LettreBox> rotor3Forward = rotor3[0]
+        .map((e) => LettreBox(
+            animColor: Colors.red,
+            triggerChange: false,
+            caractere: e.toString()))
+        .toList();
+
+    mR.encryptionInfo['indexes']['forward'][2] == -1
+        ? null
+        : rotor3Forward
+            .elementAt(mR.encryptionInfo['indexes']['forward'][2])
+            .setTrigger();
+
+    List<LettreBox> rotor3Backward = rotor3[1]
+        .map((e) => LettreBox(
+            animColor: Colors.blue,
+            triggerChange: false,
+            caractere: e.toString()))
+        .toList();
+    mR.encryptionInfo['indexes']['backward'][2] == -1
+        ? null
+        : rotor3Backward
+            .elementAt(mR.encryptionInfo['indexes']['backward'][2])
+            .setTrigger();
     return Container(
       padding: const EdgeInsets.only(
         left: 8,
@@ -253,25 +320,13 @@ class Rotor3 extends StatelessWidget {
       child: Column(
         children: [
           Row(
-            children: mR
-                .getRouteValues(2)[0]
-                .map((e) => LettreBox(
-                    animColor: Colors.red,
-                    triggerChange: false,
-                    caractere: e.toString()))
-                .toList(),
+            children: rotor3Backward,
           ),
           const SizedBox(
             height: 10,
           ),
           Row(
-            children: mR
-                .getRouteValues(2)[1]
-                .map((e) => LettreBox(
-                    animColor: Colors.red,
-                    triggerChange: false,
-                    caractere: e.toString()))
-                .toList(),
+            children: rotor3Forward,
           ),
         ],
       ),
@@ -290,11 +345,26 @@ class Alphabet extends StatefulWidget {
 class _AlphabetState extends State<Alphabet> {
   @override
   Widget build(BuildContext context) {
+    List<LettreBox> alphabet = widget.mR.alghabet
+        .map((e) => LettreBox(
+            animColor: Colors.red, triggerChange: false, caractere: e))
+        .toList();
+    if (widget.mR.encryptionInfo["indexes"]["first"] != -1 &&
+        widget.mR.encryptionInfo["indexes"]["last"] != -1) {
+      alphabet
+          .elementAt(widget.mR.encryptionInfo["indexes"]["first"])
+          .setTrigger();
+      alphabet
+          .elementAt(widget.mR.encryptionInfo["indexes"]["last"])
+          .animColor = Colors.blue;
+
+      alphabet
+          .elementAt(widget.mR.encryptionInfo["indexes"]["last"])
+          .setTrigger();
+    }
+
     return Row(
-      children: widget.mR.alghabet
-          .map((e) => LettreBox(
-              animColor: Colors.red, triggerChange: false, caractere: e))
-          .toList(),
+      children: alphabet,
     );
   }
 }
