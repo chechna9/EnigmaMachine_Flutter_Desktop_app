@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Output extends StatefulWidget {
-  const Output({Key? key}) : super(key: key);
+  final MainRouter mR;
+  const Output({Key? key, required this.mR}) : super(key: key);
 
   @override
   State<Output> createState() => _OutputState();
@@ -25,9 +26,11 @@ class _OutputState extends State<Output> {
           offset: const Offset(15, 0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: const [
-              Reflecteur(),
-              Text(
+            children: [
+              Reflecteur(
+                mR: widget.mR,
+              ),
+              const Text(
                 "Réflecteur",
                 style: TextStyle(
                   fontFamily: "Poppins",
@@ -42,9 +45,11 @@ class _OutputState extends State<Output> {
         //Rotor 3
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: const [
-            Rotor3(),
-            Text(
+          children: [
+            Rotor3(
+              mR: widget.mR,
+            ),
+            const Text(
               "Rotor 3",
               style: TextStyle(
                 fontFamily: "Poppins",
@@ -58,9 +63,11 @@ class _OutputState extends State<Output> {
         //Rotor 2
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: const [
-            Rotor2(),
-            Text(
+          children: [
+            Rotor2(
+              mR: widget.mR,
+            ),
+            const Text(
               "Rotor 2",
               style: TextStyle(
                 fontFamily: "Poppins",
@@ -93,8 +100,12 @@ class _OutputState extends State<Output> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              const Alphabet(),
-              EtapSuivante(),
+              Alphabet(
+                mR: widget.mR,
+              ),
+              EtapSuivante(
+                mR: widget.mR,
+              ),
             ],
           ),
         ),
@@ -104,9 +115,8 @@ class _OutputState extends State<Output> {
 }
 
 class Reflecteur extends StatelessWidget {
-  const Reflecteur({
-    Key? key,
-  }) : super(key: key);
+  final MainRouter mR;
+  Reflecteur({Key? key, required this.mR}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -172,9 +182,8 @@ class Rotor1 extends StatelessWidget {
 }
 
 class Rotor2 extends StatelessWidget {
-  const Rotor2({
-    Key? key,
-  }) : super(key: key);
+  final MainRouter mR;
+  const Rotor2({Key? key, required this.mR}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -222,9 +231,8 @@ class Rotor2 extends StatelessWidget {
 }
 
 class Rotor3 extends StatelessWidget {
-  const Rotor3({
-    Key? key,
-  }) : super(key: key);
+  final MainRouter mR;
+  const Rotor3({Key? key, required this.mR}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -272,7 +280,8 @@ class Rotor3 extends StatelessWidget {
 }
 
 class Alphabet extends StatefulWidget {
-  const Alphabet({Key? key}) : super(key: key);
+  final MainRouter mR;
+  const Alphabet({Key? key, required this.mR}) : super(key: key);
 
   @override
   State<Alphabet> createState() => _AlphabetState();
@@ -282,7 +291,7 @@ class _AlphabetState extends State<Alphabet> {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: mR.alghabet
+      children: widget.mR.alghabet
           .map((e) => LettreBox(
               animColor: Colors.red, triggerChange: false, caractere: e))
           .toList(),
@@ -291,7 +300,8 @@ class _AlphabetState extends State<Alphabet> {
 }
 
 class EtapSuivante extends StatefulWidget {
-  EtapSuivante({Key? key}) : super(key: key);
+  final MainRouter mR;
+  EtapSuivante({Key? key, required this.mR}) : super(key: key);
 
   @override
   State<EtapSuivante> createState() => _EtapSuivanteState();
@@ -325,7 +335,8 @@ class _EtapSuivanteState extends State<EtapSuivante> {
             }
 
             if (ind < decryptedText.length) {
-              Provider.of<Messages>(context, listen: false).addToEncrypt(mR
+              Provider.of<Messages>(context, listen: false).addToEncrypt(widget
+                  .mR
                   .encryptCaracter(caracter: decryptedText[ind])['encrypted']);
 
               ind++;
@@ -338,7 +349,8 @@ class _EtapSuivanteState extends State<EtapSuivante> {
               firstOperation = false;
             }
             if (ind < encryptedText.length) {
-              Provider.of<Messages>(context, listen: false).addToDecrypt(mR
+              Provider.of<Messages>(context, listen: false).addToDecrypt(widget
+                  .mR
                   .encryptCaracter(caracter: encryptedText[ind])['encrypted']);
 
               ind++;

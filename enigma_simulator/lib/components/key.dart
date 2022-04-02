@@ -1,6 +1,7 @@
 import 'package:enigma_simulator/Providers/errorKeyProvider.dart';
 import 'package:enigma_simulator/constants.dart';
 import 'package:enigma_simulator/controllers/cle.dart';
+import 'package:enigma_simulator/controllers/main_router.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +9,8 @@ import 'package:provider/provider.dart';
 import '../Providers/messageProvider.dart';
 
 class KeyWindow extends StatefulWidget {
-  const KeyWindow({Key? key}) : super(key: key);
+  final MainRouter mR;
+  const KeyWindow({Key? key, required this.mR}) : super(key: key);
 
   @override
   State<KeyWindow> createState() => _KeyWindowState();
@@ -159,6 +161,7 @@ class _KeyWindowState extends State<KeyWindow> {
         ),
         RotorConfigButton(
           error: _error,
+          mR: widget.mR,
         ),
       ],
     );
@@ -178,8 +181,10 @@ class RotorInfo {
 }
 
 class RotorConfigButton extends StatefulWidget {
+  final MainRouter mR;
   bool error;
-  RotorConfigButton({Key? key, required this.error}) : super(key: key);
+  RotorConfigButton({Key? key, required this.error, required this.mR})
+      : super(key: key);
 
   @override
   State<RotorConfigButton> createState() => _RotorConfigButtonState();
@@ -190,8 +195,10 @@ class _RotorConfigButtonState extends State<RotorConfigButton> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    mR.reset();
-    mR.config();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      widget.mR.reset();
+      widget.mR.config();
+    });
   }
 
   @override
@@ -212,7 +219,7 @@ class _RotorConfigButtonState extends State<RotorConfigButton> {
         onPressed: widget.error
             ? null
             : () {
-                mR.setCle(
+                widget.mR.setCle(
                   Cle(
                     order: [
                       int.parse(firstRotor[1]),
@@ -237,8 +244,8 @@ class _RotorConfigButtonState extends State<RotorConfigButton> {
                     ],
                   ),
                 );
-                mR.reset();
-                mR.config();
+                widget.mR.reset();
+                widget.mR.config();
                 Provider.of<Messages>(context, listen: false).resetDecrypt();
                 Provider.of<Messages>(context, listen: false).resetEncrypt();
                 firstOperation = true;

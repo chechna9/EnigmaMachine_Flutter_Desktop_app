@@ -41,6 +41,7 @@ class MainRouter extends ChangeNotifier {
     this._routationCounter = 0;
 
     //config first router to shift and direction
+    notifyListeners();
     return 0;
   }
 
@@ -55,6 +56,7 @@ class MainRouter extends ChangeNotifier {
 
     this._currentRouter = this.cle.getFirstRouterInOrder();
     this._routationCounter = 0;
+    notifyListeners();
     return 0;
   }
 

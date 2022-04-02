@@ -1,7 +1,9 @@
 import 'package:enigma_simulator/components/input.dart';
 import 'package:enigma_simulator/components/output.dart';
 import 'package:enigma_simulator/constants.dart';
+import 'package:enigma_simulator/controllers/main_router.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -13,22 +15,27 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
+    MainRouter mR = Provider.of<MainRouter>(context);
     return Material(
       child: Container(
         color: myGrey,
         child: Column(
-          children: const [
+          children: [
             Expanded(
               flex: 2,
-              child: Output(),
+              child: Output(
+                mR: mR,
+              ),
             ),
-            Divider(
+            const Divider(
               endIndent: 400,
               indent: 400,
               color: myBlue,
             ),
             Expanded(
-              child: Input(),
+              child: Input(
+                mR: mR,
+              ),
             ),
           ],
         ),

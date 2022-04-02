@@ -1,3 +1,4 @@
+import 'package:enigma_simulator/controllers/main_router.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -5,7 +6,8 @@ import '../Providers/messageProvider.dart';
 import '../constants.dart';
 
 class MessageWindow extends StatefulWidget {
-  const MessageWindow({Key? key}) : super(key: key);
+  final MainRouter mR;
+  const MessageWindow({Key? key, required this.mR}) : super(key: key);
 
   @override
   State<MessageWindow> createState() => _MessageWindowState();
@@ -22,8 +24,8 @@ class _MessageWindowState extends State<MessageWindow> {
       Provider.of<Messages>(context, listen: false).resetDecrypt();
       encryptController.clear();
       decrypytConroller.clear();
-      mR.reset();
-      mR.config();
+      widget.mR.reset();
+      widget.mR.config();
     });
   }
 

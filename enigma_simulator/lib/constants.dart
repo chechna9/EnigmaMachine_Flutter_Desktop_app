@@ -6,7 +6,6 @@ const Color myBlue = Color(0xff10454f);
 const Color myGreen = Color(0xffbde038);
 bool encryptMode = true;
 bool firstOperation = true;
-MainRouter mR = MainRouter();
 
 //first rotor conrollers
 String firstRotor = "R1";
