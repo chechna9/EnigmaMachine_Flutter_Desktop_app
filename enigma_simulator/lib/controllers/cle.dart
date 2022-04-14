@@ -24,8 +24,6 @@ class Cle {
 
   int getRoutersDirection({int router = 1}) {
     //print(router);
-
-    router = router + 1 % 3;
     return directions[this.order.indexOf(router)];
   }
 
