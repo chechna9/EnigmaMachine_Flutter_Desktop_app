@@ -118,41 +118,49 @@ class MainRouter extends ChangeNotifier {
   //encryption function: return a map {'encrypted': caracter, 'rotated': the routated route}
   Map encryptCaracter({String caracter = 'A'}) {
     encryptionInfo['indexes'] = Map();
-    //Turn into lowercase
-    caracter = caracter.toUpperCase();
-    //find index
-    int index = this.alghabet.indexOf(caracter);
-    encryptionInfo['indexes']['first'] = index;
+    if (RegExp(r'^[a-zA-Z]+$').hasMatch(caracter)) {
+      //Turn into lowercase
+      caracter = caracter.toUpperCase();
+      //find index
+      int index = this.alghabet.indexOf(caracter);
+      encryptionInfo['indexes']['first'] = index;
 
-    //print('Log: first index: ' + index.toString());
+      //print('Log: first index: ' + index.toString());
 
-    //forward
-    encryptionInfo['indexes']['forward'] = [-1, -1, -1];
-    for (int routeIndex = 0; routeIndex < 3; routeIndex++) {
-      encryptionInfo['indexes']['forward'][routeIndex] = index;
+      //forward
+      encryptionInfo['indexes']['forward'] = [-1, -1, -1];
+      for (int routeIndex = 0; routeIndex < 3; routeIndex++) {
+        encryptionInfo['indexes']['forward'][routeIndex] = index;
 
-      index = this.cor_routers[routeIndex].getNext(index);
-      //print('Log: forward index at router: '+this.cor_routers[routeIndex].key.toString()+': ' + index.toString());
+        index = this.cor_routers[routeIndex].getNext(index);
+        //print('Log: forward index at router: '+this.cor_routers[routeIndex].key.toString()+': ' + index.toString());
+      }
+
+      //reflection
+      encryptionInfo['indexes']['reflecteur'] = index;
+      index = (this.reflecteur[index] + index) % 26;
+
+      //backward
+      encryptionInfo['indexes']['backward'] = [-1, -1, -1]; //init
+      for (int routeIndex = 2; routeIndex >= 0; routeIndex--) {
+        encryptionInfo['indexes']['backward'][routeIndex] = index;
+        index = this.cor_routers[routeIndex].getNext(index, isBackward: true);
+        //print('Log: backward index at router: '+this.cor_routers[routeIndex].key.toString()+': ' + index.toString());
+      }
+
+      //get letter
+      encryptionInfo['indexes']['last'] = index;
+      encryptionInfo['encrypted'] = this.alghabet[index].toUpperCase();
+      shouldRotate = true;
+      //rotate after calculating the incryption
+      // encryptionInfo['rotated'] = this._routate();
+      notifyListeners();
+      return encryptionInfo;
+    } else {
+      shouldRotate = false;
+      initAnim();
+      encryptionInfo['encrypted'] = caracter;
+      return encryptionInfo;
     }
-
-    //reflection
-    encryptionInfo['indexes']['reflecteur'] = index;
-    index = (this.reflecteur[index] + index) % 26;
-
-    //backward
-    encryptionInfo['indexes']['backward'] = [-1, -1, -1]; //init
-    for (int routeIndex = 2; routeIndex >= 0; routeIndex--) {
-      encryptionInfo['indexes']['backward'][routeIndex] = index;
-      index = this.cor_routers[routeIndex].getNext(index, isBackward: true);
-      //print('Log: backward index at router: '+this.cor_routers[routeIndex].key.toString()+': ' + index.toString());
-    }
-
-    //get letter
-    encryptionInfo['indexes']['last'] = index;
-    encryptionInfo['encrypted'] = this.alghabet[index].toUpperCase();
-    //rotate after calculating the incryption
-    // encryptionInfo['rotated'] = this._routate();
-    notifyListeners();
-    return encryptionInfo;
   }
 }

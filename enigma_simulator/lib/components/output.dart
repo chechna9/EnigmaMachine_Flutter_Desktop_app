@@ -379,6 +379,7 @@ class EtapSuivante extends StatefulWidget {
 
 class _EtapSuivanteState extends State<EtapSuivante> {
   int ind = 0;
+  String current_char = 'a';
 
   @override
   Widget build(BuildContext context) {
@@ -397,45 +398,71 @@ class _EtapSuivanteState extends State<EtapSuivante> {
       ),
       child: TextButton(
         onPressed: () {
-          if (shouldRotate) {
-            widget.mR.initAnim();
-            print(widget.mR.routate());
-          } else {
-            if (encryptMode) {
-              if (firstOperation) {
-                ind = 0;
-
-                Provider.of<Messages>(context, listen: false).resetEncrypt();
-                firstOperation = false;
-              }
-
-              if (ind < decryptedText.length) {
-                Provider.of<Messages>(context, listen: false).addToEncrypt(
-                    widget.mR.encryptCaracter(
-                        caracter: decryptedText[ind])['encrypted']);
-
-                ind++;
-              }
+          print(
+              'LOG: decryptedText.length: ' + decryptedText.length.toString());
+          //testing if we still need to function
+          if (ind <= decryptedText.length || ind <= encryptedText.length) {
+            print(shouldRotate);
+            if (shouldRotate) {
+              print('LOG: we shouldRotate');
+              widget.mR.initAnim();
+              print(widget.mR.routate());
+              //shouldRotate = false;
+              setState(() {
+                shouldRotate = false;
+                print('LOG: shouldRotate setted to false');
+              });
             } else {
-              if (firstOperation) {
-                ind = 0;
-                Provider.of<Messages>(context, listen: false).resetDecrypt();
+              print('we should encrypt');
+              if (encryptMode) {
+                if (firstOperation) {
+                  ind = 0;
+                  Provider.of<Messages>(context, listen: false).resetEncrypt();
+                  firstOperation = false;
+                }
 
-                firstOperation = false;
-              }
-              if (ind < encryptedText.length) {
-                Provider.of<Messages>(context, listen: false).addToDecrypt(
-                    widget.mR.encryptCaracter(
-                        caracter: encryptedText[ind])['encrypted']);
+                if (ind < decryptedText.length) {
+                  current_char = decryptedText[ind];
+                  Provider.of<Messages>(context, listen: false).addToEncrypt(
+                      widget.mR
+                          .encryptCaracter(
+                              caracter: decryptedText[ind])['encrypted']
+                          .toString());
 
-                ind++;
+                  ind++;
+                }
+              } else {
+                if (firstOperation) {
+                  ind = 0;
+                  Provider.of<Messages>(context, listen: false).resetDecrypt();
+
+                  firstOperation = false;
+                }
+                if (ind < encryptedText.length) {
+                  Provider.of<Messages>(context, listen: false).addToDecrypt(
+                      widget.mR
+                          .encryptCaracter(
+                              caracter: encryptedText[ind])['encrypted']
+                          .toString());
+
+                  ind++;
+                }
               }
             }
+            // if (ind < decryptedText.length || ind < encryptedText.length)
+            //   setState(() {
+            //     shouldRotate = false;
+            //     print('LOG: Trigered action');
+            //   });
+            // print('LOG: shouldRotate is ' + shouldRotate.toString());
+            // //testing if we are on the after animation phase
+            // if (RegExp(r'^[a-zA-Z]+$').hasMatch(current_char)) {
+            //   setState(() {
+            //     shouldRotate = false;
+            //     print('LOG: shouldRotate setted to false');
+            //   });
+            // }
           }
-          if (ind < decryptedText.length || ind < encryptedText.length)
-            setState(() {
-              shouldRotate = !shouldRotate;
-            });
         },
         style: TextButton.styleFrom(
           onSurface: myBlue,
