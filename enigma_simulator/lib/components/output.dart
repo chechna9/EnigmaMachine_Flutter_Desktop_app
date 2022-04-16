@@ -21,7 +21,7 @@ class _OutputState extends State<Output> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        //reflacteur
+        //reflecteur
         Transform.translate(
           offset: const Offset(15, 0),
           child: Row(
@@ -188,7 +188,11 @@ class Rotor1 extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         border: Border.all(
-          color: myGreen,
+          color: (shouldRotate &&
+                  mR.encryptionInfo["rotated"] != null &&
+                  mR.encryptionInfo["rotated"] == 1)
+              ? Colors.red
+              : myGreen,
           style: BorderStyle.solid,
           width: 2,
         ),
@@ -250,7 +254,11 @@ class Rotor2 extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         border: Border.all(
-          color: myGreen,
+          color: (shouldRotate &&
+                  mR.encryptionInfo["rotated"] != null &&
+                  mR.encryptionInfo["rotated"] == 2)
+              ? Colors.red
+              : myGreen,
           style: BorderStyle.solid,
           width: 2,
         ),
@@ -312,7 +320,11 @@ class Rotor3 extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         border: Border.all(
-          color: myGreen,
+          color: (shouldRotate &&
+                  mR.encryptionInfo["rotated"] != null &&
+                  mR.encryptionInfo["rotated"] == 3)
+              ? Colors.red
+              : myGreen,
           style: BorderStyle.solid,
           width: 2,
         ),

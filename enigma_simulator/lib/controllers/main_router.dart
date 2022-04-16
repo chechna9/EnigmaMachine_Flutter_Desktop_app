@@ -109,6 +109,7 @@ class MainRouter extends ChangeNotifier {
       //reset routations
       this._routationCounter = 0;
     }
+    encryptionInfo['rotated'] = routerToRotate;
     notifyListeners();
     return routerToRotate;
   }
