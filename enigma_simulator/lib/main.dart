@@ -2,6 +2,7 @@ import 'package:enigma_simulator/Providers/errorKeyProvider.dart';
 import 'package:enigma_simulator/Providers/messageProvider.dart';
 import 'package:enigma_simulator/controllers/main_router.dart';
 import 'package:enigma_simulator/pages/home.dart';
+import 'package:enigma_simulator/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +25,7 @@ void main() {
           fontFamily: 'Poppins',
         ),
         debugShowCheckedModeBanner: false,
-        home: const Home(),
+        home: const SplashScreen(),
       ),
     ),
   );
