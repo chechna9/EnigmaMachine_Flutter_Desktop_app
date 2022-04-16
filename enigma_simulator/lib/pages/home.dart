@@ -19,22 +19,30 @@ class _HomeState extends State<Home> {
     return Material(
       child: Container(
         color: myGrey,
-        child: Column(
-          children: [
-            Expanded(
-              flex: 2,
-              child: Output(
-                mR: mR,
-              ),
-            ),
-            const Divider(
-              endIndent: 400,
-              indent: 400,
-              color: myBlue,
-            ),
-            Expanded(
-              child: Input(
-                mR: mR,
+        child: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Column(
+                children: [
+                  Expanded(
+                    flex: 7,
+                    child: Output(
+                      mR: mR,
+                    ),
+                  ),
+                  const Divider(
+                    endIndent: 400,
+                    indent: 400,
+                    color: myBlue,
+                  ),
+                  Expanded(
+                    flex: 5,
+                    child: Input(
+                      mR: mR,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
