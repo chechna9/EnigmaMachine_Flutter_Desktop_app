@@ -13,12 +13,9 @@ class MessageWindow extends StatefulWidget {
   State<MessageWindow> createState() => _MessageWindowState();
 }
 
-class _MessageWindowState extends State<MessageWindow>
-    with SingleTickerProviderStateMixin {
+class _MessageWindowState extends State<MessageWindow> {
   final encryptController = TextEditingController();
   final decrypytConroller = TextEditingController();
-  AnimationController? _animationController;
-  Animation<double>? _animation;
   void _switchMode() {
     setState(() {
       encryptMode = !encryptMode;
@@ -33,39 +30,6 @@ class _MessageWindowState extends State<MessageWindow>
   }
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    );
-    final _curvedAnimation = CurvedAnimation(
-      parent: _animationController!,
-      curve: Curves.easeInExpo,
-      reverseCurve: Curves.easeIn, //easinOut
-    );
-    _animationController!.forward();
-    _animation = Tween<double>(begin: 0.7, end: 0.8).animate(_curvedAnimation)
-      ..addListener(() {
-        setState(() {});
-      })
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          _animationController!.reverse();
-        } else if (status == AnimationStatus.dismissed) {
-          _animationController!.forward();
-        }
-      });
-  }
-
-  void dispose() {
-    // TODO: implement dispose
-    _animationController!.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Row(
       children: [
@@ -75,16 +39,8 @@ class _MessageWindowState extends State<MessageWindow>
             controller: decrypytConroller,
           ),
         ),
-        // const SizedBox(
-        //   width: 15,
-        // ),
-        Transform.scale(
-          scale: _animation!.value,
-          child: Image.asset(
-            'assets/images/logoLowDim.png',
-            height: 80,
-            fit: BoxFit.scaleDown,
-          ),
+        const SizedBox(
+          width: 15,
         ),
         Expanded(
           child: DecryptedMessage(

@@ -413,7 +413,9 @@ class _EtapSuivanteState extends State<EtapSuivante> {
           print(
               'LOG: decryptedText.length: ' + decryptedText.length.toString());
           //testing if we still need to function
-          if (ind <= decryptedText.length || ind <= encryptedText.length) {
+          if (ind <= decryptedText.length ||
+              ind <= encryptedText.length ||
+              firstOperation) {
             print(shouldRotate);
             if (shouldRotate) {
               print('LOG: we shouldRotate');
