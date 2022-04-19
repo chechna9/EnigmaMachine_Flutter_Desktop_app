@@ -78,12 +78,15 @@ class _MessageWindowState extends State<MessageWindow>
         // const SizedBox(
         //   width: 15,
         // ),
-        Transform.scale(
-          scale: _animation!.value,
-          child: Image.asset(
-            'assets/images/logoLowDim.png',
-            height: 80,
-            fit: BoxFit.scaleDown,
+        Transform.rotate(
+          angle: !encryptMode ? 0 : 3.14,
+          child: Transform.scale(
+            scale: _animation!.value,
+            child: Image.asset(
+              'assets/images/logoLowDim.png',
+              height: 80,
+              fit: BoxFit.scaleDown,
+            ),
           ),
         ),
         Expanded(
