@@ -397,6 +397,58 @@ class _EtapSuivanteState extends State<EtapSuivante> {
   Widget build(BuildContext context) {
     String decryptedText = Provider.of<Messages>(context).decryptedText;
     String encryptedText = Provider.of<Messages>(context).encryptedText;
+    void etapeSuivante() {
+      if (ind <= decryptedText.length ||
+          ind <= encryptedText.length ||
+          firstOperation) {
+        print(shouldRotate);
+        if (shouldRotate) {
+          print('LOG: we shouldRotate');
+          widget.mR.initAnim();
+          print(widget.mR.routate());
+          //shouldRotate = false;
+          setState(() {
+            shouldRotate = false;
+            print('LOG: shouldRotate setted to false');
+          });
+        } else {
+          print('we should encrypt');
+          if (encryptMode) {
+            if (firstOperation) {
+              ind = 0;
+              Provider.of<Messages>(context, listen: false).resetEncrypt();
+              firstOperation = false;
+            }
+
+            if (ind < decryptedText.length) {
+              current_char = decryptedText[ind];
+              Provider.of<Messages>(context, listen: false).addToEncrypt(widget
+                  .mR
+                  .encryptCaracter(caracter: decryptedText[ind])['encrypted']
+                  .toString());
+
+              ind++;
+            }
+          } else {
+            if (firstOperation) {
+              ind = 0;
+              Provider.of<Messages>(context, listen: false).resetDecrypt();
+
+              firstOperation = false;
+            }
+            if (ind < encryptedText.length) {
+              Provider.of<Messages>(context, listen: false).addToDecrypt(widget
+                  .mR
+                  .encryptCaracter(caracter: encryptedText[ind])['encrypted']
+                  .toString());
+
+              ind++;
+            }
+          }
+        }
+      }
+    }
+
     return Container(
       decoration: BoxDecoration(
         color: myBlue,
@@ -408,90 +460,43 @@ class _EtapSuivanteState extends State<EtapSuivante> {
           ),
         ],
       ),
-      child: TextButton(
-        onPressed: () {
-          print(
-              'LOG: decryptedText.length: ' + decryptedText.length.toString());
-          //testing if we still need to function
-          if (ind <= decryptedText.length ||
-              ind <= encryptedText.length ||
-              firstOperation) {
-            print(shouldRotate);
-            if (shouldRotate) {
-              print('LOG: we shouldRotate');
-              widget.mR.initAnim();
-              print(widget.mR.routate());
-              //shouldRotate = false;
-              setState(() {
-                shouldRotate = false;
-                print('LOG: shouldRotate setted to false');
-              });
-            } else {
-              print('we should encrypt');
-              if (encryptMode) {
-                if (firstOperation) {
-                  ind = 0;
-                  Provider.of<Messages>(context, listen: false).resetEncrypt();
-                  firstOperation = false;
-                }
-
-                if (ind < decryptedText.length) {
-                  current_char = decryptedText[ind];
-                  Provider.of<Messages>(context, listen: false).addToEncrypt(
-                      widget.mR
-                          .encryptCaracter(
-                              caracter: decryptedText[ind])['encrypted']
-                          .toString());
-
-                  ind++;
-                }
-              } else {
-                if (firstOperation) {
-                  ind = 0;
-                  Provider.of<Messages>(context, listen: false).resetDecrypt();
-
-                  firstOperation = false;
-                }
-                if (ind < encryptedText.length) {
-                  Provider.of<Messages>(context, listen: false).addToDecrypt(
-                      widget.mR
-                          .encryptCaracter(
-                              caracter: encryptedText[ind])['encrypted']
-                          .toString());
-
-                  ind++;
-                }
-              }
+      child: GestureDetector(
+        onDoubleTap: () async {
+          if (encryptMode) {
+            for (int i = 0; i < 2 * decryptedText.length; i++) {
+              await Future.delayed(
+                const Duration(seconds: 1),
+                etapeSuivante,
+              );
             }
-            // if (ind < decryptedText.length || ind < encryptedText.length)
-            //   setState(() {
-            //     shouldRotate = false;
-            //     print('LOG: Trigered action');
-            //   });
-            // print('LOG: shouldRotate is ' + shouldRotate.toString());
-            // //testing if we are on the after animation phase
-            // if (RegExp(r'^[a-zA-Z]+$').hasMatch(current_char)) {
-            //   setState(() {
-            //     shouldRotate = false;
-            //     print('LOG: shouldRotate setted to false');
-            //   });
-            // }
+          } else {
+            for (int i = 0; i < 2 * encryptedText.length; i++) {
+              await Future.delayed(
+                const Duration(seconds: 1),
+                etapeSuivante,
+              );
+            }
           }
         },
-        style: TextButton.styleFrom(
-          onSurface: myBlue,
-          padding: const EdgeInsets.symmetric(
-            vertical: 16,
-            horizontal: 8,
+        child: TextButton(
+          onPressed: () {
+            etapeSuivante();
+          },
+          style: TextButton.styleFrom(
+            onSurface: myBlue,
+            padding: const EdgeInsets.symmetric(
+              vertical: 16,
+              horizontal: 8,
+            ),
           ),
-        ),
-        child: const Text(
-          "Etape Suivante",
-          style: TextStyle(
-            fontFamily: "Poppins",
-            color: Colors.white,
-            fontWeight: FontWeight.w500,
-            fontSize: 18,
+          child: const Text(
+            "Etape Suivante",
+            style: TextStyle(
+              fontFamily: "Poppins",
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+              fontSize: 18,
+            ),
           ),
         ),
       ),
