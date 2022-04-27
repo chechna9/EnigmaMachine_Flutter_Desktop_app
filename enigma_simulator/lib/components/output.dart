@@ -460,8 +460,11 @@ class _EtapSuivanteState extends State<EtapSuivante> {
           ),
         ],
       ),
-      child: GestureDetector(
-        onDoubleTap: () async {
+      child: TextButton(
+        onPressed: () {
+          etapeSuivante();
+        },
+        onLongPress: () async {
           if (encryptMode) {
             for (int i = 0; i < 2 * decryptedText.length; i++) {
               await Future.delayed(
@@ -478,25 +481,20 @@ class _EtapSuivanteState extends State<EtapSuivante> {
             }
           }
         },
-        child: TextButton(
-          onPressed: () {
-            etapeSuivante();
-          },
-          style: TextButton.styleFrom(
-            onSurface: myBlue,
-            padding: const EdgeInsets.symmetric(
-              vertical: 16,
-              horizontal: 8,
-            ),
+        style: TextButton.styleFrom(
+          onSurface: myBlue,
+          padding: const EdgeInsets.symmetric(
+            vertical: 16,
+            horizontal: 8,
           ),
-          child: const Text(
-            "Etape Suivante",
-            style: TextStyle(
-              fontFamily: "Poppins",
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-              fontSize: 18,
-            ),
+        ),
+        child: const Text(
+          "Etape Suivante",
+          style: TextStyle(
+            fontFamily: "Poppins",
+            color: Colors.white,
+            fontWeight: FontWeight.w500,
+            fontSize: 18,
           ),
         ),
       ),
